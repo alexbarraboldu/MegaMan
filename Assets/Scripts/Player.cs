@@ -8,17 +8,21 @@ public class Player : MonoBehaviour
 	private Rigidbody2D rb2d;
 
 	private float fixedDelta;
+	public float Counter;
 
 	[Header("Variables for player:")]
 	[Space(5)]
-	public float Speed = 0.15f;
+	public float Speed = 0.10f;
+	public float VSpeed = 1.5f;
 	public bool TouchingMarging;
 
 	public float health = 30.0f;
 	//public bool IsDead = false;
 
-	public float JumpRate;
+	public float JumpRate = 10f;
 	public float JumpTime;
+
+	public bool Jumping = false;
 
 	[Header("Variables for gun:")]
 	[Space(10)]
@@ -30,7 +34,6 @@ public class Player : MonoBehaviour
 
 	public float fireRate = 5.0f;
 
-	public float Counter;
 	private float initBulletTime;
 
 	[Header("Variables for AudioManager:")]
@@ -66,7 +69,7 @@ public class Player : MonoBehaviour
 	private void FixedUpdate()
 	{
 		fixedDelta = Time.fixedDeltaTime * 1000.0f;
-		Counter = /*Time.time **/ fixedDelta;
+		Counter = Time.time * fixedDelta;
 
 		PlayerMovement();
 
@@ -80,21 +83,19 @@ public class Player : MonoBehaviour
 
 	void PlayerMovement()
 	{
-		if (rb2d.velocity.x > Speed || rb2d.velocity.x < Speed) rb2d.velocity = new Vector2(0, Movement.y);
+		if (rb2d.velocity.x > Speed || rb2d.velocity.x < Speed) rb2d.velocity = new Vector2(0f, Movement.y);
 
 		Movement.x = Input.GetAxis("Horizontal");
 
-		if (Counter >= JumpTime && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.RightControl)))
+		if ((Jumping == false && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.RightControl))))
 		{
-			Movement = new Vector2(Movement.x, 2f);
-
+			Movement = new Vector2(Movement.x, VSpeed);
 			JumpTime = Counter + JumpRate;
 		}
-		else if (Counter >= JumpTime)
-			{
-				Movement = new Vector2(Movement.x, 0f);
-				JumpTime = Counter + JumpRate;
-			}
+		else if (Counter >= JumpTime - 16f && Jumping == true)
+		{
+			Movement = new Vector2(Movement.x, 0f);
+		}
 
 		rb2d.AddForce(Movement * Speed * fixedDelta, ForceMode2D.Impulse);
 	}
@@ -132,6 +133,18 @@ public class Player : MonoBehaviour
 			health -= 40f;
 			Destroy(collision.gameObject);
 			//SoundManager.Play(HittedSound);
+		}
+		if (collision.gameObject.tag == "Grid")
+		{
+			Jumping = false;
+		}
+	}
+
+	private void OnCollisionExit2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "Grid")
+		{
+			Jumping = true;
 		}
 	}
 }
