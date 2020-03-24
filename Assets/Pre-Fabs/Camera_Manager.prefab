@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 741a639b2d1663440bfadb7a5ae6f6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerObject: {fileID: 0}
+  CameraSpeed: 1
+  Marging: 0
 --- !u!1001 &2218532341560402828
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51,10 +54,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2461435274131978597}
     m_Modifications:
-    - target: {fileID: 8911674787873398717, guid: 63f7824b77c68ad4497622114590365d,
-        type: 3}
-      propertyPath: m_Name
-      value: Main Camera
+    - target: {fileID: 603978261, guid: 63f7824b77c68ad4497622114590365d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 603978261, guid: 63f7824b77c68ad4497622114590365d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8911674787873398593, guid: 63f7824b77c68ad4497622114590365d,
         type: 3}
@@ -109,6 +115,26 @@ PrefabInstance:
     - target: {fileID: 8911674787873398593, guid: 63f7824b77c68ad4497622114590365d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911674787873398717, guid: 63f7824b77c68ad4497622114590365d,
+        type: 3}
+      propertyPath: m_Name
+      value: Main Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911674787873398718, guid: 63f7824b77c68ad4497622114590365d,
+        type: 3}
+      propertyPath: orthographic size
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911674787873398719, guid: 63f7824b77c68ad4497622114590365d,
+        type: 3}
+      propertyPath: m_AssetsPPU
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911674787873398719, guid: 63f7824b77c68ad4497622114590365d,
+        type: 3}
+      propertyPath: m_StretchFill
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

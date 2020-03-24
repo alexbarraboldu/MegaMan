@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour
         CameraHeight = Main_Camera.orthographicSize;
         CameraWidth = CameraHeight * Main_Camera.aspect;
 
-        Player = PlayerObject.gameObject.GetComponent<Player>();
+        //Player = PlayerObject.gameObject.GetComponent<Player>();
     }
 
     void Update()
