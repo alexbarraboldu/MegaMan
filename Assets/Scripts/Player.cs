@@ -7,12 +7,14 @@ public class Player : MonoBehaviour
 	private Vector2 Movement;
 	private Rigidbody2D rb2d;
 
+	private BoxCollider2D box2D;
+
 	private float fixedDelta;
 	public float Counter;
 
 	[Header("Variables for player:")]
 	[Space(5)]
-	public float Speed = 0.10f;
+	public float Speed = 0.125f;
 	public float VSpeed = 1.5f;
 	public bool TouchingMarging;
 
@@ -48,6 +50,7 @@ public class Player : MonoBehaviour
 	private void Start()
 	{
 		rb2d = GetComponent<Rigidbody2D>();
+		box2D = GetComponent<BoxCollider2D>();
 		rb2dBullet = null;
 		Movement = Vector2.zero;
 		//AuxSpeed = Speed;
@@ -92,7 +95,7 @@ public class Player : MonoBehaviour
 			Movement = new Vector2(Movement.x, VSpeed);
 			JumpTime = Counter + JumpRate;
 		}
-		else if (Counter >= JumpTime - 16f && Jumping == true)
+		else if (Counter >= JumpTime - 15f && Jumping == true)
 		{
 			Movement = new Vector2(Movement.x, 0f);
 		}
@@ -109,12 +112,49 @@ public class Player : MonoBehaviour
 		//Destroy(AuxBulletObject, 1f);
 	}
 
+	private bool checkRaycastWithScenario(RaycastHit2D[] hits)
+	{
+		foreach (RaycastHit2D hit in hits)
+		{
+			if (hit.collider != null)
+			{
+				if (hit.collider.gameObject.tag == "Grid") return true;
+			}
+		}
+		return false;
+	}
+
 	private void OnCollisionStay2D(Collision2D collision)
 	{
 		if (collision.gameObject.tag == "Paredes" && TouchingMarging)
 		{
 			health = 0;
 			//SoundManager.Play(DeadSound);
+		}
+
+		if (collision.gameObject.tag == "Grid")
+		{
+			if (Jumping)
+			{
+				bool col1 = false;
+				bool col2 = false;
+				bool col3 = false;
+				float center_x = (box2D.bounds.min.x + box2D.bounds.max.x) / 2;
+				Vector2 centerPosition = new Vector2(center_x, box2D.bounds.min.y) / 2;
+				Vector2 leftPosition = new Vector2(box2D.bounds.min.x, box2D.bounds.min.y) / 2;
+				Vector2 rightPosition = new Vector2(box2D.bounds.max.x, box2D.bounds.min.y) / 2;
+
+				RaycastHit2D[] hits = Physics2D.RaycastAll(centerPosition, -Vector2.up, 2);
+				if (checkRaycastWithScenario(hits)) { col1 = true; }
+
+				hits = Physics2D.RaycastAll(leftPosition, -Vector2.up, 2);
+				if (checkRaycastWithScenario(hits)) { col2 = true; }
+
+				hits = Physics2D.RaycastAll(rightPosition, -Vector2.up, 2);
+				if (checkRaycastWithScenario(hits)) { col3 = true; }
+
+				if (col1 || col2 || col3) { Jumping = false; }
+			}
 		}
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
@@ -133,10 +173,6 @@ public class Player : MonoBehaviour
 			health -= 40f;
 			Destroy(collision.gameObject);
 			//SoundManager.Play(HittedSound);
-		}
-		if (collision.gameObject.tag == "Grid")
-		{
-			Jumping = false;
 		}
 	}
 
