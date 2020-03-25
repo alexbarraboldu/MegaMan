@@ -26,24 +26,24 @@ public class Player : MonoBehaviour
 
 	public bool Jumping = false;
 
-	[Header("Variables for gun:")]
-	[Space(10)]
-	public GameObject bulletObject;
-	private GameObject AuxBulletObject;
-	private Rigidbody2D rb2dBullet;
-	public Transform firePoint;
-	public float BulletSpeed = 100.0f;
+	//[Header("Variables for gun:")]
+	//[Space(10)]
+	//public GameObject bulletObject;
+	//private GameObject AuxBulletObject;
+	//private Rigidbody2D rb2dBullet;
+	//public Transform firePoint;
+	//public float BulletSpeed = 100.0f;
 
-	public float fireRate = 5.0f;
+	//public float fireRate = 5.0f;
 
-	private float initBulletTime;
+	//private float initBulletTime;
 
-	[Header("Variables for AudioManager:")]
-	[Space(10)]
-   // public SoundManager SoundManager;
-	private string ShootSound = "PlayerShoot";
-	private string DeadSound = "PlayerDead";
-	private string HittedSound = "PlayerHit";
+	//[Header("Variables for AudioManager:")]
+	//[Space(10)]
+ //  // public SoundManager SoundManager;
+	//private string ShootSound = "PlayerShoot";
+	//private string DeadSound = "PlayerDead";
+	//private string HittedSound = "PlayerHit";
 
 
    // public GameManager GameManager;
@@ -51,21 +51,20 @@ public class Player : MonoBehaviour
 	{
 		rb2d = GetComponent<Rigidbody2D>();
 		box2D = GetComponent<BoxCollider2D>();
-		rb2dBullet = null;
+		//rb2dBullet = null;
 		Movement = Vector2.zero;
-		//AuxSpeed = Speed;
 
 		//SoundManager = FindObjectOfType<SoundManager>();
-		//GameManager = FindObjectOfType<GameManager>();
 	}
 
 	private void Update()
 	{
 		if (health <= 0)
 		{
-			//GameManager.CheckPlayer();
-			Destroy(gameObject);
+			GameManager.Instance.PlayerIsDead = true;
 			//SoundManager.Play(DeadSound);
+			Destroy(gameObject);
+			GameManager.Instance.CheckPlayer();
 		}
 	}
 
@@ -76,12 +75,12 @@ public class Player : MonoBehaviour
 
 		PlayerMovement();
 
-		if (Counter >= initBulletTime && (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)))
-		{
-			Shooting();
-			//SoundManager.Play(ShootSound);
-			initBulletTime = Counter + fireRate;
-		}
+		//if (Counter >= initBulletTime && (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)))
+		//{
+		//	Shooting();
+		//	//SoundManager.Play(ShootSound);
+		//	initBulletTime = Counter + fireRate;
+		//}
 	}
 
 	void PlayerMovement()
@@ -126,12 +125,6 @@ public class Player : MonoBehaviour
 
 	private void OnCollisionStay2D(Collision2D collision)
 	{
-		if (collision.gameObject.tag == "Paredes" && TouchingMarging)
-		{
-			health = 0;
-			//SoundManager.Play(DeadSound);
-		}
-
 		if (collision.gameObject.tag == "Grid")
 		{
 			if (Jumping)
@@ -159,21 +152,21 @@ public class Player : MonoBehaviour
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.tag == "Bullet")
-		{
+		//if (collision.gameObject.tag == "Bullet")
+		//{
 			//if (!collision.gameObject.GetComponent<Bullet>().WhoShoot)
 			//{
 			//    health -= 10f;
 			//    Destroy(collision.gameObject);
 			//    SoundManager.Play(HittedSound);
 			//}
-		}
-		if (collision.gameObject.tag == "Enemy")
-		{
-			health -= 40f;
-			Destroy(collision.gameObject);
-			//SoundManager.Play(HittedSound);
-		}
+		//}
+		//if (collision.gameObject.tag == "Enemy")
+		//{
+		//	health -= 40f;
+		//	Destroy(collision.gameObject);
+		//	SoundManager.Play(HittedSound);
+		//}
 	}
 
 	private void OnCollisionExit2D(Collision2D collision)
