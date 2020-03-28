@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
 	public Vector2 PlayerCameraBounds;
 
 	public bool Marging;
+	public bool BossSpot;
 
 	void Start()
 	{
@@ -43,15 +44,16 @@ public class CameraController : MonoBehaviour
 
 	void CameraMovement()
 	{
-		if (Main_Camera.transform.position.x >= 6000.0f)
+		if (Main_Camera.transform.position.x >= 60.0f)
 		{
-			Main_Camera.transform.position = new Vector3(6000.0f, 0f, 0f);
-			return;
+			BossSpot = true;
+			Main_Camera.transform.position = new Vector3(60.0f, 0f, -10f);
 		}
 	}
 
 	void PlayerLimits()
 	{
+		if (BossSpot) return;
 		if (PlayerObject.transform.position.x > CurrentCameraX + PlayerCameraBounds.x)
 		{
 			Debug.Log("Right Side;");
@@ -70,52 +72,20 @@ public class CameraController : MonoBehaviour
 		}
 		else Marging = false;
 
-		if (PlayerObject.transform.position.y > CurrentCameraY + (-PlayerCameraBounds.y))
-		{
-			Debug.Log("Top Side;");
-			//Player.transform.position = new Vector3(Player.transform.position.x, CurrentCameraY + (CameraHeight - 10f));
-			Marging = true;
-			Main_Camera.transform.position += new Vector3(0f, CameraSpeed, 0f);
-		}
-		else if (PlayerObject.transform.position.y < CurrentCameraY + PlayerCameraBounds.y)
-		{
-			Debug.Log("Bottom Side;");
-			//Player.transform.position = new Vector3(Player.transform.position.x, CurrentCameraY + (-CameraHeight + 10f));
-			Marging = true;
-			Main_Camera.transform.position -= new Vector3(0f, CameraSpeed, 0f);
-		}
-		else Marging = false;
+		//if (PlayerObject.transform.position.y > CurrentCameraY + (-PlayerCameraBounds.y))
+		//{
+		//	Debug.Log("Top Side;");
+		//	//Player.transform.position = new Vector3(Player.transform.position.x, CurrentCameraY + (CameraHeight - 10f));
+		//	Marging = true;
+		//	Main_Camera.transform.position += new Vector3(0f, CameraSpeed, 0f);
+		//}
+		//else if (PlayerObject.transform.position.y < CurrentCameraY + PlayerCameraBounds.y)
+		//{
+		//	Debug.Log("Bottom Side;");
+		//	//Player.transform.position = new Vector3(Player.transform.position.x, CurrentCameraY + (-CameraHeight + 10f));
+		//	Marging = true;
+		//	Main_Camera.transform.position -= new Vector3(0f, CameraSpeed, 0f);
+		//}
+		//else Marging = false;
 	}
-
-
-
-
-
-
-	//void PlayerLimits()
-	//{
-	//    if ((PlayerObject.transform.position.x >= CurrentCameraX + (CameraWidth - CameraWidth / 4)))
-	//    {
-	//        Debug.Log("Right Camera Side;");
-	//        Player.transform.position = new Vector3(CurrentCameraX + (CameraWidth - CameraWidth / 4), Player.transform.position.y);
-	//    }
-	//    else if (PlayerObject.transform.position.x <= CurrentCameraX + (CameraWidth / 6 - CameraWidth))
-	//    {
-	//        Debug.Log("Left Camera Side;");
-	//        Player.transform.position = new Vector3(CurrentCameraX + (CameraWidth / 6 - CameraWidth), Player.transform.position.y);
-	//        Player.TouchingMarging = true;
-	//    }
-	//    else Player.TouchingMarging = false;
-
-	//    if (PlayerObject.transform.position.y >= CurrentCameraY + (CameraHeight - 10f))
-	//    {
-	//        Debug.Log("Top Camera Side;");
-	//        Player.transform.position = new Vector3(Player.transform.position.x, CurrentCameraY + (CameraHeight - 10f));
-	//    }
-	//    else if (PlayerObject.transform.position.y <= CurrentCameraY + (-CameraHeight + 10f))
-	//    {
-	//        Debug.Log("Bottom Camera Side;");
-	//        Player.transform.position = new Vector3(Player.transform.position.x, CurrentCameraY + (-CameraHeight + 10f));
-	//    }
-	//}
 }

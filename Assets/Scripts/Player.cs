@@ -26,32 +26,29 @@ public class Player : MonoBehaviour
 
 	public bool Jumping = false;
 
-	//[Header("Variables for gun:")]
-	//[Space(10)]
-	//public GameObject bulletObject;
-	//private GameObject AuxBulletObject;
-	//private Rigidbody2D rb2dBullet;
-	//public Transform firePoint;
-	//public float BulletSpeed = 100.0f;
-
-	//public float fireRate = 5.0f;
-
-	//private float initBulletTime;
+	[Header("Variables for gun:")]
+	[Space(10)]
+	public GameObject bulletObject;
+	private GameObject AuxBulletObject;
+	private Rigidbody2D rb2dBullet;
+	public Transform firePoint;
+	public float BulletSpeed = 0.25f;
+	public float fireRate = 5.0f;
+	private float initBulletTime;
 
 	//[Header("Variables for AudioManager:")]
 	//[Space(10)]
- //  // public SoundManager SoundManager;
+	//  // public SoundManager SoundManager;
 	//private string ShootSound = "PlayerShoot";
 	//private string DeadSound = "PlayerDead";
 	//private string HittedSound = "PlayerHit";
 
-
-   // public GameManager GameManager;
 	private void Start()
 	{
 		rb2d = GetComponent<Rigidbody2D>();
 		box2D = GetComponent<BoxCollider2D>();
-		//rb2dBullet = null;
+		
+		rb2dBullet = null;
 		Movement = Vector2.zero;
 
 		//SoundManager = FindObjectOfType<SoundManager>();
@@ -75,12 +72,12 @@ public class Player : MonoBehaviour
 
 		PlayerMovement();
 
-		//if (Counter >= initBulletTime && (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)))
-		//{
-		//	Shooting();
-		//	//SoundManager.Play(ShootSound);
-		//	initBulletTime = Counter + fireRate;
-		//}
+		if (Counter >= initBulletTime && (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)))
+		{
+			Shooting();
+			//SoundManager.Play(ShootSound);
+			initBulletTime = Counter + fireRate;
+		}
 	}
 
 	void PlayerMovement()
@@ -89,7 +86,7 @@ public class Player : MonoBehaviour
 
 		Movement.x = Input.GetAxis("Horizontal");
 
-		if ((Jumping == false && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.RightControl))))
+		if ((Jumping == false && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))))
 		{
 			Movement = new Vector2(Movement.x, VSpeed);
 			JumpTime = Counter + JumpRate;
@@ -104,11 +101,11 @@ public class Player : MonoBehaviour
 
 	void Shooting()
 	{
-		//AuxBulletObject = Instantiate(bulletObject.gameObject, firePoint.position, firePoint.rotation);
-		//AuxBulletObject.GetComponent<Bullet>().WhoShoot = true;
-		//rb2dBullet = AuxBulletObject.GetComponent<Rigidbody2D>();
-		//rb2dBullet.AddForce(firePoint.right * BulletSpeed * fixedDelta, ForceMode2D.Impulse);
-		//Destroy(AuxBulletObject, 1f);
+		AuxBulletObject = Instantiate(bulletObject.gameObject, firePoint.position, firePoint.rotation);
+		AuxBulletObject.GetComponent<Bullet>().WhoShoot = true;
+		rb2dBullet = AuxBulletObject.GetComponent<Rigidbody2D>();
+		rb2dBullet.AddForce(firePoint.right * BulletSpeed * fixedDelta, ForceMode2D.Impulse);
+		Destroy(AuxBulletObject, 1f);
 	}
 
 	private bool checkRaycastWithScenario(RaycastHit2D[] hits)
@@ -152,21 +149,21 @@ public class Player : MonoBehaviour
 	}
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		//if (collision.gameObject.tag == "Bullet")
-		//{
-			//if (!collision.gameObject.GetComponent<Bullet>().WhoShoot)
-			//{
-			//    health -= 10f;
-			//    Destroy(collision.gameObject);
-			//    SoundManager.Play(HittedSound);
-			//}
-		//}
-		//if (collision.gameObject.tag == "Enemy")
-		//{
-		//	health -= 40f;
-		//	Destroy(collision.gameObject);
-		//	SoundManager.Play(HittedSound);
-		//}
+		if (collision.gameObject.tag == "Bullet")
+		{
+			if (!collision.gameObject.GetComponent<Bullet>().WhoShoot)
+			{
+				health -= 10f;
+				Destroy(collision.gameObject);
+				//SoundManager.Play(HittedSound);
+			}
+		}
+		if (collision.gameObject.tag == "Enemy")
+		{
+			health -= 40f;
+			Destroy(collision.gameObject);
+			//SoundManager.Play(HittedSound);
+		}
 	}
 
 	private void OnCollisionExit2D(Collision2D collision)

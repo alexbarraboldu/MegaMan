@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     private Scene currentScene;
 
+    public int PlayerScore = 0;
+
     public bool PlayerIsDead = false;
 
     void Start()
@@ -48,5 +50,10 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(4);
         }
+    }
+
+    public void addPoints(int points)
+    {
+        PlayerScore += points;
     }
 }
